@@ -99,7 +99,7 @@ with gr.Blocks(css=css) as demo:
         input_image = gr.Image(label="Input Image", type='numpy', elem_id='img-display-input')
         depth_image_slider = ImageSlider(label="Depth Map with Slider View", elem_id='img-display-output', position=0.5)
 
-    withgr.Row()
+    with gr.Row()
         submit = gr.Button(value="Compute Depth")
         processing_res_choice = gr.Radio(
                 [
