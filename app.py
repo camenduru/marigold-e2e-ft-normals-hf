@@ -31,6 +31,8 @@ css = """
 }
 """
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+dtype = torch.float32
+variant = None
 checkpoint_path = "GonzaloMG/marigold-e2e-ft-depth"
 unet         = UNet2DConditionModel.from_pretrained(checkpoint_path, subfolder="unet")   
 vae          = AutoencoderKL.from_pretrained(checkpoint_path, subfolder="vae")  
