@@ -11,7 +11,7 @@ from gradio_imageslider import ImageSlider
 from huggingface_hub import hf_hub_download
 
 # from depth_anything_v2.dpt import DepthAnythingV2
-from marigold import MarigoldPipeline
+from Marigold.marigold import MarigoldPipeline
 from diffusers import AutoencoderKL, DDIMScheduler, UNet2DConditionModel
 from transformers import CLIPTextModel, CLIPTokenizer
 import xformers
