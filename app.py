@@ -163,7 +163,7 @@ with gr.Blocks(css=css) as demo:
     example_files = os.listdir('assets/examples')
     example_files.sort()
     example_files = [os.path.join('assets/examples', filename) for filename in example_files]
-    example_files = [[image, processing_res_choice] for image in example_files]
+    example_files = [[image, 768] for image in example_files]
     examples = gr.Examples(examples=example_files, inputs=[input_image, processing_res_choice], outputs=[depth_image_slider, gray_depth_file, raw_file], fn=on_submit)
 
 
