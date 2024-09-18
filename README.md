@@ -1,7 +1,7 @@
 ---
-title: OnlyDepth
-emoji: 😻
-colorFrom: purple
+title: End-to-End Fine-Tuned Marigold for Depth Estimation
+emoji: ⚡
+colorFrom: blue
 colorTo: green
 sdk: gradio
 sdk_version: 4.44.0
