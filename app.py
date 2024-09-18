@@ -36,7 +36,7 @@ unet         = UNet2DConditionModel.from_pretrained(checkpoint_path, subfolder="
 vae          = AutoencoderKL.from_pretrained(checkpoint_path, subfolder="vae")  
 text_encoder = CLIPTextModel.from_pretrained(checkpoint_path, subfolder="text_encoder")  
 tokenizer    = CLIPTokenizer.from_pretrained(checkpoint_path, subfolder="tokenizer") 
-scheduler    = DDIMScheduler.from_pretrained(checkpoint_path, timestep_spacing=timestep_spacing, subfolder="scheduler") 
+scheduler    = DDIMScheduler.from_pretrained(checkpoint_path, timestep_spacing="trailing", subfolder="scheduler") 
 pipe = MarigoldPipeline.from_pretrained(pretrained_model_name_or_path = checkpoint_path,
                                         unet=unet, 
                                         vae=vae, 
@@ -123,8 +123,7 @@ with gr.Blocks(css=css) as demo:
         # Save the colored depth map
         tmp_colored_depth = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
         depth_colored.save(tmp_colored_depth.name)
-    
-        print("Dummy predictions complete, returning results.")
+   
         return [(image, depth_colored),  tmp_gray_depth.name, tmp_colored_depth.name]
 
         # h, w = image.shape[:2]
