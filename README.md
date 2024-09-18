@@ -1,8 +1,8 @@
 ---
-title: End-to-End Fine-Tuned Marigold for Depth Estimation
+title: End-to-End Fine-Tuned Marigold for Normals Estimation
 emoji: ⚡
 colorFrom: blue
-colorTo: green
+colorTo: purple
 sdk: gradio
 sdk_version: 4.44.0
 app_file: app.py
