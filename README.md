@@ -1,5 +1,5 @@
 ---
-title: End-to-End Fine-Tuned Marigold for Normals Estimation
+title: End-to-End Fine-Tuned Marigold for Normals
 emoji: ⚡
 colorFrom: blue
 colorTo: purple
