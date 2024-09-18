@@ -14,7 +14,7 @@ from huggingface_hub import hf_hub_download
 from Marigold.marigold import MarigoldPipeline
 from diffusers import AutoencoderKL, DDIMScheduler, UNet2DConditionModel
 from transformers import CLIPTextModel, CLIPTokenizer
-import xformers
+# import xformers
 
 css = """
 #img-display-container {
@@ -48,10 +48,10 @@ pipe = MarigoldPipeline.from_pretrained(pretrained_model_name_or_path = checkpoi
                                         variant=variant, 
                                         torch_dtype=dtype, 
                                         )
-try:
-    pipe.enable_xformers_memory_efficient_attention()
-except ImportError:
-    pass  # run without xformers
+# try:
+#     pipe.enable_xformers_memory_efficient_attention()
+# except ImportError:
+#     pass  # run without xformers
 pipe = pipe.to(DEVICE)
 pipe.unet.eval()
 
