@@ -111,7 +111,8 @@ with gr.Blocks(css=css) as demo:
             )
 
     gray_depth_file = gr.File(label="Grayscale depth map", elem_id="download",)
-    raw_file = gr.File(label="16-bit raw output (can be considered as disparity)", elem_id="download",)
+    raw_file = gr.File(label="Raw Depth Data (.npy)", elem_id="download")
+    # raw_file = gr.File(label="16-bit raw output (can be considered as disparity)", elem_id="download",)
 
     cmap = matplotlib.colormaps.get_cmap('Spectral_r')
 
@@ -125,8 +126,8 @@ with gr.Blocks(css=css) as demo:
         depth_npy, depth_colored = predict_depth(pil_image, processing_res_choice)
     
         # Save the npy data (raw depth map)
-        # tmp_npy_depth = tempfile.NamedTemporaryFile(suffix='.npy', delete=False)
-        # np.save(tmp_npy_depth.name, depth_npy)
+        tmp_npy_depth = tempfile.NamedTemporaryFile(suffix='.npy', delete=False)
+        np.save(tmp_npy_depth.name, depth_npy)
     
         # Save the grayscale depth map
         depth_gray = (depth_npy * 65535.0).astype(np.uint16)
@@ -137,7 +138,7 @@ with gr.Blocks(css=css) as demo:
         tmp_colored_depth = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
         depth_colored.save(tmp_colored_depth.name)
    
-        return [(image, depth_colored),  tmp_gray_depth.name, tmp_colored_depth.name]
+        return [(image, depth_colored),  tmp_gray_depth.name, tmp_npy_depth.name]
 
         # h, w = image.shape[:2]
 
