@@ -83,9 +83,9 @@ description = """... **...**"""
 #     return model.infer_image(image)
     
 @spaces.GPU
-def predict_depth(image): #, processing_res, model_choice, current_model):
+def predict_depth(image, processing_res_choice):
     with torch.no_grad():
-        pipe_out = pipe(image, denoising_steps=1, ensemble_size=1, noise="zeros", normals=False, processing_res=768, match_input_res=True)
+        pipe_out = pipe(image, denoising_steps=1, ensemble_size=1, noise="zeros", normals=False, processing_res=processing_res_choice, match_input_res=True)
     pred = pipe_out.depth_np
     pred_colored = pipe_out.depth_colored
     return pred, pred_colored
@@ -115,14 +115,14 @@ with gr.Blocks(css=css) as demo:
 
     cmap = matplotlib.colormaps.get_cmap('Spectral_r')
 
-    def on_submit(image):
+    def on_submit(image, processing_res_choice):
 
         if image is None:
             print("No image uploaded.")
             return None
     
         pil_image = Image.fromarray(image.astype('uint8'))
-        depth_npy, depth_colored = predict_depth(pil_image)
+        depth_npy, depth_colored = predict_depth(pil_image, processing_res_choice)
     
         # Save the npy data (raw depth map)
         # tmp_npy_depth = tempfile.NamedTemporaryFile(suffix='.npy', delete=False)
@@ -163,7 +163,7 @@ with gr.Blocks(css=css) as demo:
     example_files.sort()
     example_files = [os.path.join('assets/examples', filename) for filename in example_files]
     example_files = [[image, 768] for image in example_files]
-    examples = gr.Examples(examples=example_files, inputs=[input_image], outputs=[depth_image_slider, gray_depth_file, raw_file], fn=on_submit)
+    examples = gr.Examples(examples=example_files, inputs=[input_image, processing_res_choice], outputs=[depth_image_slider, gray_depth_file, raw_file], fn=on_submit)
 
 
 if __name__ == '__main__':
