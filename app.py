@@ -1,3 +1,8 @@
+###########################################################################################
+# Code based on the Hugging Face Space of Depth Anything v2
+# https://huggingface.co/spaces/depth-anything/Depth-Anything-V2/blob/main/app.py
+###########################################################################################
+
 import gradio as gr
 import cv2
 import matplotlib
@@ -10,11 +15,9 @@ import tempfile
 from gradio_imageslider import ImageSlider
 from huggingface_hub import hf_hub_download
 
-# from depth_anything_v2.dpt import DepthAnythingV2
 from Marigold.marigold import MarigoldPipeline
 from diffusers import AutoencoderKL, DDIMScheduler, UNet2DConditionModel
 from transformers import CLIPTextModel, CLIPTokenizer
-# import xformers
 
 css = """
 #img-display-container {
@@ -48,39 +51,12 @@ pipe = MarigoldPipeline.from_pretrained(pretrained_model_name_or_path = checkpoi
                                         variant=variant, 
                                         torch_dtype=dtype, 
                                         )
-# try:
-#     pipe.enable_xformers_memory_efficient_attention()
-# except ImportError:
-#     pass  # run without xformers
 pipe = pipe.to(DEVICE)
 pipe.unet.eval()
 
-# model_configs = {
-#     'vits': {'encoder': 'vits', 'features': 64, 'out_channels': [48, 96, 192, 384]},
-#     'vitb': {'encoder': 'vitb', 'features': 128, 'out_channels': [96, 192, 384, 768]},
-#     'vitl': {'encoder': 'vitl', 'features': 256, 'out_channels': [256, 512, 1024, 1024]},
-#     'vitg': {'encoder': 'vitg', 'features': 384, 'out_channels': [1536, 1536, 1536, 1536]}
-# }
-# encoder2name = {
-#     'vits': 'Small',
-#     'vitb': 'Base',
-#     'vitl': 'Large',
-#     'vitg': 'Giant', # we are undergoing company review procedures to release our giant model checkpoint
-# }
-# encoder = 'vitl'
-# model_name = encoder2name[encoder]
-# model = DepthAnythingV2(**model_configs[encoder])
-# filepath = hf_hub_download(repo_id=f"depth-anything/Depth-Anything-V2-{model_name}", filename=f"depth_anything_v2_{encoder}.pth", repo_type="model")
-# state_dict = torch.load(filepath, map_location="cpu")
-# model.load_state_dict(state_dict)
-# model = model.to(DEVICE).eval()
 
-title = "# ..."
-description = """... **...**"""
-
-
-# def predict_depth(image):
-#     return model.infer_image(image)
+title = "# End-to-End Fine-Tuned Marigold for Depth Estimation"
+description = """ Please refer to our [paper](https://arxiv.org/abs/2409.11355) and [GitHub](https://vision.rwth-aachen.de/diffusion-e2e-ft) for more details."""
     
 @spaces.GPU
 def predict_depth(image, processing_res_choice):
@@ -112,7 +88,6 @@ with gr.Blocks(css=css) as demo:
 
     gray_depth_file = gr.File(label="Grayscale depth map", elem_id="download",)
     raw_file = gr.File(label="Raw Depth Data (.npy)", elem_id="download")
-    # raw_file = gr.File(label="16-bit raw output (can be considered as disparity)", elem_id="download",)
 
     cmap = matplotlib.colormaps.get_cmap('Spectral_r')
 
@@ -139,24 +114,6 @@ with gr.Blocks(css=css) as demo:
         depth_colored.save(tmp_colored_depth.name)
    
         return [(image, depth_colored),  tmp_gray_depth.name, tmp_npy_depth.name]
-
-        # h, w = image.shape[:2]
-
-        # depth = predict_depth(image[:, :, ::-1])
-
-        # raw_depth = Image.fromarray(depth.astype('uint16'))
-        # tmp_raw_depth = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
-        # raw_depth.save(tmp_raw_depth.name)
-
-        # depth = (depth - depth.min()) / (depth.max() - depth.min()) * 255.0
-        # depth = depth.astype(np.uint8)
-        # colored_depth = (cmap(depth)[:, :, :3] * 255).astype(np.uint8)
-
-        # gray_depth = Image.fromarray(depth)
-        # tmp_gray_depth = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
-        # gray_depth.save(tmp_gray_depth.name)
-
-        # return [(original_image, colored_depth), tmp_gray_depth.name, tmp_raw_depth.name]
 
     submit.click(on_submit, inputs=[input_image, processing_res_choice], outputs=[depth_image_slider, gray_depth_file, raw_file])
 
