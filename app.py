@@ -98,7 +98,18 @@ with gr.Blocks(css=css) as demo:
     with gr.Row():
         input_image = gr.Image(label="Input Image", type='numpy', elem_id='img-display-input')
         depth_image_slider = ImageSlider(label="Depth Map with Slider View", elem_id='img-display-output', position=0.5)
-    submit = gr.Button(value="Compute Depth")
+
+    withgr.Row()
+        submit = gr.Button(value="Compute Depth")
+        processing_res_choice = gr.Radio(
+                [
+                    ("Recommended (768)", 768),
+                    ("Native", 0),
+                ],
+                label="Processing resolution",
+                value=768,
+            )
+
     gray_depth_file = gr.File(label="Grayscale depth map", elem_id="download",)
     raw_file = gr.File(label="16-bit raw output (can be considered as disparity)", elem_id="download",)
 
@@ -146,11 +157,12 @@ with gr.Blocks(css=css) as demo:
 
         # return [(original_image, colored_depth), tmp_gray_depth.name, tmp_raw_depth.name]
 
-    submit.click(on_submit, inputs=[input_image], outputs=[depth_image_slider, gray_depth_file, raw_file])
+    submit.click(on_submit, inputs=[input_image, processing_res_choice], outputs=[depth_image_slider, gray_depth_file, raw_file])
 
     example_files = os.listdir('assets/examples')
     example_files.sort()
     example_files = [os.path.join('assets/examples', filename) for filename in example_files]
+    example_files = [[image, 768] for image in example_files]
     examples = gr.Examples(examples=example_files, inputs=[input_image], outputs=[depth_image_slider, gray_depth_file, raw_file], fn=on_submit)
 
 
