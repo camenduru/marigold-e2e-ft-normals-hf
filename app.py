@@ -9,7 +9,6 @@ import matplotlib
 import numpy as np
 import os
 from PIL import Image
-import spaces
 import torch
 import tempfile
 from gradio_imageslider import ImageSlider
@@ -57,8 +56,7 @@ pipe.unet.eval()
 
 title = "# End-to-End Fine-Tuned Marigold for Normals Estimation"
 description = """ Please refer to our [paper](https://arxiv.org/abs/2409.11355) and [GitHub](https://vision.rwth-aachen.de/diffusion-e2e-ft) for more details."""
-    
-@spaces.GPU
+
 def predict_normals(image, processing_res_choice):
     with torch.no_grad():
         pipe_out = pipe(image, denoising_steps=1, ensemble_size=1, noise="zeros", normals=True, processing_res=processing_res_choice, match_input_res=True)
@@ -124,4 +122,4 @@ with gr.Blocks(css=css) as demo:
 
 
 if __name__ == '__main__':
-    demo.queue().launch(share=True)
+    demo.queue().launch(share=True, inline=False)
